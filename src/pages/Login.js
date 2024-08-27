@@ -95,8 +95,8 @@ export default function Login() {
         .then(data => {
             console.log("Login Retrieved User:", data)
             setUser({
-                id: data._id,
-                isAdmin: data.isAdmin
+                id: data.user._id,
+                isAdmin: data.user.isAdmin
 
             });
 
