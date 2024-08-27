@@ -1,83 +1,93 @@
 import { useState, useEffect, useContext } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import UserContext from '../UserContext';
 
 export default function Register() {
 
-	const {user} = useContext(UserContext);
+	
+    const { user } = useContext(UserContext);
+    const navigate = useNavigate();
 
-	const [firstName, setFirstName] = useState("");
-	const [lastName, setLastName] = useState("");
-	const [email,setEmail] = useState("");
-	const [password,setPassword] = useState("");
-	const [mobileNo, setMobileNo] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [mobileNo, setMobileNo] = useState("");
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
 
     const [isActive, setIsActive] = useState(false);
 
-	function registerUser(e) {
 
-		e.preventDefault();
+    useEffect(() => {
 
-		fetch('https://app-building-api.onrender.com/users/register',{
+        if ((firstName !== "" && lastName !== "" && mobileNo !== "" && email !== "" && password !== '' && confirmPassword !== "") && (password === confirmPassword)) {
+            setIsActive(true)
+        } else {
+            setIsActive(false)
+        }
 
-		method: 'POST',
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({
+        if(user.id){
+            navigate('/workout')
+        }
 
-			firstName: firstName,
-			lastName: lastName,
-			email: email,
-			password: password,
-			mobileNo: mobileNo
+    }, [email, password, confirmPassword, navigate, user.id])
 
-		})
-		})
-		.then(res => res.json())
-		.then(data => {
 
-		//determine the returned data. Especially useful when the given API is online.
-		console.log(data);
 
-		//data will only contain an email property if we can properly save our user.
-		if(data.message === "Registered Successfully"){
+    function registerUser(e) {
 
-            setFirstName('');
-            setLastName('');
-			setEmail('');
-			setPassword('');
-			setMobileNo('');
+        e.preventDefault();
 
-			Swal.fire({
-        	    title: "Registration Successful",
-        	    icon: "success",
-        	    text: "Thank you for registering!"
-        	});
+        fetch('https://fitnessapi-beltran.onrender.com/users/register', {
 
-		} 
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                firstName: firstName,
+			    lastName:  lastName,
+                mobileNo:  mobileNo,
+                email: email,
+                password: password
 
-		})
-	}
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+
+                //determine the returned data. Especially useful when the given API is online.
+                console.log(data);
+
+                //data will only contain an email property if we can properly save our user.
+                if (data.message === "Registered Successfully") {
+
+                    setFirstName('');
+                    setLastName('');
+                    setMobileNo('');
+                    setEmail('');
+                    setPassword('');
+                    setConfirmPassword('');
+
+                    Swal.fire({
+                        title: "Registration Successful",
+                        icon: "success",
+                        text: "Thank you for registering!"
+                    });
+
+                }
+
+            })
+    }
     
-	useEffect(()=>{
-
-		if((email !== "" && password !=="" && mobileNo !=="")){
-
-			setIsActive(true)
-
-		} else {
-
-			setIsActive(false)
-
-		}
-
-	},[firstName, lastName, email, password, mobileNo])
 
 	return (
-        
+
+        <>
+
         <div className='d-flex justify-content-center gap-4'>
         <Form onSubmit={(e) => registerUser(e)} className='col-lg-5 col-10'>
         <h1 className="my-5 text-center">Register</h1>
@@ -101,6 +111,15 @@ export default function Register() {
                 onChange={e => {setLastName(e.target.value)}}/>
             </Form.Group>
             <Form.Group className='pb-2'>
+                {/* <Form.Label>Mobile No:</Form.Label> */}
+                <Form.Control 
+                type="number" 
+                placeholder="Mobile No." 
+                required 
+                value={mobileNo} 
+                onChange={e => {setMobileNo(e.target.value)}}/>
+            </Form.Group>
+            <Form.Group className='pb-2'>
                 {/* <Form.Label>Email:</Form.Label> */}
                 <Form.Control 
                 type="email"
@@ -119,14 +138,15 @@ export default function Register() {
                 onChange={e => {setPassword(e.target.value)}}/>
             </Form.Group>
             <Form.Group className='pb-2'>
-                {/* <Form.Label>Mobile No:</Form.Label> */}
+                {/* <Form.Label>Password:</Form.Label> */}
                 <Form.Control 
-                type="number" 
-                placeholder="Mobile No." 
+                type="password" 
+                placeholder="Confrim Password" 
                 required 
-                value={mobileNo} 
-                onChange={e => {setMobileNo(e.target.value)}}/>
+                value={confirmPassword} 
+                onChange={e => {setConfirmPassword(e.target.value)}}/>
             </Form.Group>
+           
 			
             {
                 isActive
@@ -136,6 +156,7 @@ export default function Register() {
             }
         </Form>
         </div>
+        </>
 		
 		)
 }
