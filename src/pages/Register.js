@@ -41,7 +41,7 @@ export default function Register() {
 
         e.preventDefault();
 
-        fetch('https://fitnessapi-beltran.onrender.com/users/register', {
+        fetch('https://app-building-api.onrender.com/users/register', {
 
             method: 'POST',
             headers: {
