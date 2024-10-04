@@ -1,11 +1,14 @@
 import { useState, useEffect, useContext } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, FloatingLabel } from 'react-bootstrap';
 import { Navigate, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import UserContext from '../UserContext';
 
 export default function Register() {
 
+    const handleLoginClick = () => {
+        navigate('/login')
+    }
 	
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
@@ -88,73 +91,96 @@ export default function Register() {
 
         <>
 
-        <div className='d-flex justify-content-center gap-4'>
-        <Form onSubmit={(e) => registerUser(e)} className='col-lg-5 col-10'>
-        <h1 className="my-5 text-center">Register</h1>
+  
 
-			<Form.Group className='pb-2'>
-                {/* <Form.Label>First Name:</Form.Label> */}
-                <Form.Control 
-                type="text" 
-                placeholder="First Name" 
-                required 
-                value={firstName} 
-                onChange={e => {setFirstName(e.target.value)}}/>
-            </Form.Group>
-			<Form.Group className='pb-2'>
-                {/* <Form.Label>Last Name:</Form.Label> */}
-                <Form.Control 
-                type="text" 
-                placeholder="Last Name" 
-                required 
-                value={lastName} 
-                onChange={e => {setLastName(e.target.value)}}/>
-            </Form.Group>
-            <Form.Group className='pb-2'>
-                {/* <Form.Label>Mobile No:</Form.Label> */}
-                <Form.Control 
-                type="number" 
-                placeholder="Mobile No." 
-                required 
-                value={mobileNo} 
-                onChange={e => {setMobileNo(e.target.value)}}/>
-            </Form.Group>
-            <Form.Group className='pb-2'>
-                {/* <Form.Label>Email:</Form.Label> */}
-                <Form.Control 
-                type="email"
-                placeholder="Email address" 
-                required 
-                value={email} 
-                onChange={e => {setEmail(e.target.value)}}/>
-            </Form.Group>
-            <Form.Group className='pb-2'>
-                {/* <Form.Label>Password:</Form.Label> */}
-                <Form.Control 
-                type="password" 
-                placeholder="Password" 
-                required 
-                value={password} 
-                onChange={e => {setPassword(e.target.value)}}/>
-            </Form.Group>
-            <Form.Group className='pb-2'>
-                {/* <Form.Label>Password:</Form.Label> */}
-                <Form.Control 
-                type="password" 
-                placeholder="Confrim Password" 
-                required 
-                value={confirmPassword} 
-                onChange={e => {setConfirmPassword(e.target.value)}}/>
-            </Form.Group>
-           
-			
-            {
-                isActive
 
-                ? <Button variant="primary" type="submit" className=' col-12'>Register</Button>
-                : <Button variant="danger" className=' col-12' disabled>Register</Button>
-            }
-        </Form>
+        <div className='container d-flex justify-content-center align-items-center' style={{ minHeight: '80vh'}}>
+            <Form onSubmit={(e) => registerUser(e)} className='col-lg-5 col-10'>
+            <h2 className=" mb-4">Register</h2>
+
+                <Form.Group className='pb-2'>
+                    <FloatingLabel controlId="floatingInput" label="First Name">
+                        <Form.Control 
+                        type="text"
+                        placeholder="First Name"
+                        value={firstName}
+                        onChange={e => {setFirstName(e.target.value)}}
+                        required
+                        />
+                    </FloatingLabel>
+                </Form.Group>
+
+                <Form.Group className='pb-2'>
+                    <FloatingLabel controlId="floatingInput" label="Last Name">
+                        <Form.Control 
+                        type="text"
+                        placeholder="Last Name"
+                        value={lastName}
+                        onChange={e => {setLastName(e.target.value)}}
+                        required
+                        />
+                    </FloatingLabel>
+                </Form.Group>
+                
+                <Form.Group className='pb-2'>
+                    <FloatingLabel controlId="floatingInput" label="Mobile No.">
+                        <Form.Control 
+                        type="number"
+                        placeholder="Modile No."
+                        value={mobileNo}
+                        onChange={e => {setMobileNo(e.target.value)}}
+                        required
+                        />
+                    </FloatingLabel>
+                </Form.Group>
+
+                <Form.Group className='pb-2'>
+                    <FloatingLabel controlId="floatingInput" label="Email address">
+                        <Form.Control 
+                        type="email"
+                        placeholder="Email address"
+                        value={email}
+                        onChange={e => {setEmail(e.target.value)}}
+                        required
+                        />
+                    </FloatingLabel>
+                </Form.Group>
+
+                <Form.Group className='pb-2'>
+                    <FloatingLabel controlId="floatingInput" label="Password">
+                        <Form.Control 
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={e => {setPassword(e.target.value)}}
+                        required
+                        />
+                    </FloatingLabel>
+                </Form.Group>
+
+                <Form.Group className='pb-2'>
+                    <FloatingLabel controlId="floatingInput" label="Confirmed Password">
+                        <Form.Control 
+                        type="password"
+                        placeholder="Confirmed Password"
+                        value={confirmPassword}
+                        onChange={e => {setConfirmPassword(e.target.value)}}
+                        required
+                        />
+                    </FloatingLabel>
+                </Form.Group>
+
+
+
+
+
+            
+                
+            <Button variant="danger" type="submit" className=' col-12 p-2'>Register</Button>
+
+            <p className='mt-4'>Already have an Account? <span id='login' onClick={handleLoginClick}><strong>Login</strong></span></p>
+                
+            </Form>
         </div>
         </>
 		

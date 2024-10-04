@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import UserContext from '../UserContext';
 import Banner from '../components/Banner';
+import Banner2 from '../components/Banner2';
 
 
 export default function Home() {
@@ -11,7 +12,13 @@ export default function Home() {
 
     return (
         <>
-        <Banner />
+        <div>
+   
+        <Banner2 />
+        
+
+        </div>
+      
         {/* <Row>
             <Col className="p-4 text-center">
                 <h1>Welcome To Fitnesssssssss</h1>

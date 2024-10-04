@@ -292,6 +292,9 @@ export default function Workout() {
 
     return (
         <>
+            <div className="container">
+
+            
             <Row>
                 <Col className="p-4 text-center">
                     <h1>Your Workout Plans</h1>
@@ -325,6 +328,8 @@ export default function Workout() {
                     </tbody>
                 </Table>
             </Row>
+
+            </div>
 
 
 

@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 // CSS
 import './App.css';
+import './index.css'
 // UserContext
 import { UserProvider } from './UserContext';
 // Components
@@ -70,7 +71,8 @@ function App() {
     <UserProvider value={{ user, setUser, unsetUser }}>
       <Router>
         <AppNavbar />
-        <Container>
+        {/* <Container> */}
+          <div>
           <Routes>
             <Route path='/' element={<Home />} />
 
@@ -80,7 +82,9 @@ function App() {
 
             <Route path='/workout' element={<Workout />} />
           </Routes>
-        </Container>
+          </div>
+        
+        {/* </Container> */}
       </Router>
     </UserProvider>
   )
