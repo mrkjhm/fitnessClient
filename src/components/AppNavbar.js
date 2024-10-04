@@ -15,12 +15,12 @@ export default function AppNavbar() {
     const { user } = useContext(UserContext);
 
 	return(
-		<Navbar bg="danger" expand="lg" className='Navbar'>
+		<Navbar bg="danger" data-bs-theme="dark" expand="lg" className='Navbar'>
 	
         <>
             <div className='container'>
             <Navbar.Brand as={Link} to="/"> <img src={Fitness_Logo} style={{ width: '9rem' }}/></Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Toggle aria-controls="basic-navbar-nav" bg="dark"/>
             <Navbar.Collapse>
                 <Nav className="ms-auto">
                     <Nav.Link as={NavLink} to="/" exact="true">Home</Nav.Link>
