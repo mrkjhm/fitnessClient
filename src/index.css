@@ -8,7 +8,41 @@
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
+/* ----- NAVBAR START -----*/
+
+.navbar-nav .nav-link {
+  color: white !important;
+}
+
+.navbar-nav .nav-link:hover {
+  font-weight: bold;
+}
+
+#gradient-button {
+  background: linear-gradient(90deg, #a01d2a, #f85262);
+  border: none;
+}
+
+/* ----- NAVBAR END ----- */
+
+
+
+/* ----- BENEFITS START ----- */
+
+#benefits-bg {
+  background-image: url(../src/assets/bg-img-2.jpg);
+  height: 90vh;
+  width: 100%;
+  background-position: center;
+}
+
+
+
+
+/* ----- BENEFITS END ----- */
+
 
 .banner {
   height: 100vh;
@@ -68,4 +102,35 @@
 
 #login {
   cursor: pointer;
+}
+#title {
+  font-size: 6rem;
+}
+
+#gradient-button-home:hover {
+  transition: .2s;
+ }
+
+ 
+#gradient-button-home:hover {
+ transform: scale(1.04);
+}
+
+/* Benefits Component */
+
+
+
+.text {
+  font-size: 0.8rem;
+}
+
+
+
+
+
+/* For mobile view */
+@media only screen and (max-width: 600px) {
+  #title {
+    font-size: 4rem;
+  }
 }

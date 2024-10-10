@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Form, Button, Modal } from 'react-bootstrap';
+import { Form, Button, Modal, FloatingLabel } from 'react-bootstrap';
 
 export default function AddWorkout({show, handleClose, onAdd}) {
 
     const [ name, setName ] = useState('')
-    const [ duration, setDuration ] = useState('15 min')
+    const [ duration, setDuration ] = useState('15 mins')
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -24,26 +24,41 @@ export default function AddWorkout({show, handleClose, onAdd}) {
                         <Modal.Title>Add Workout</Modal.Title>
                     </Modal.Header>
 
-                    <Modal.Body>
-                        <Form.Group>
-                            <Form.Label>Name:</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Enter Workout Name"
-                                required
-                                value={name}
-                                onChange={e => { setName(e.target.value) }} />
-                        </Form.Group>
+                    
 
-                        <Form.Group>
-                            <Form.Label>Duration:</Form.Label>
-                            <Form.Control
+                    <Modal.Body>
+
+                    <Form.Group controlId="workoutName" className='pb-2'>
+                        <FloatingLabel controlId="floatingWorkoutName" label="Workout Name">
+                            <Form.Control 
                                 type="text"
-                                placeholder="Enter Workout Duration"
+                                placeholder="Workout Name" 
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
                                 required
+                    
+                                />   
+                        </FloatingLabel>
+                    </Form.Group>
+
+                    <Form.Group controlId="duration" className='pb-2'>
+                        <FloatingLabel controlId="floatingDuratuion" label="Duration">
+                            <Form.Control 
+                                type="text"
+                                placeholder="Duration:" 
                                 value={duration}
-                                onChange={e => { setDuration(e.target.value) }} />
-                        </Form.Group>
+                                onChange={(e) => setDuration(e.target.value)}
+                                required
+                    
+                                />   
+                        </FloatingLabel>
+                    </Form.Group>
+
+                
+                    
+
+
+                        
                     </Modal.Body>
 
                     <Modal.Footer>

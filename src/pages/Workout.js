@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react"
-import { Row, Col, Table, Badge, Button, Modal } from "react-bootstrap"
+import { Row, Col, Table, Badge, Button, Modal, Card, ListGroup, Container } from "react-bootstrap"
 import Swal from "sweetalert2"
 
 import UserContext from '../UserContext';
@@ -11,6 +11,7 @@ import CompletedWorkout from "../components/CompletedWorkout"
 import { useNavigate } from "react-router-dom";
 
 export default function Workout() {
+    
 
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
@@ -22,6 +23,15 @@ export default function Workout() {
 
     const closeAddWorkoutModal = () => setAddWorkoutModal(false);
     const showAddWorkoutModal = () => setAddWorkoutModal(true);
+
+
+    const [filter, setFilter] = useState("all"); // 'all', 'completed', 'pending'
+    const handleFilterChange = (filterType) => {
+        setFilter(filterType);
+        fetchWorkout(); // Refetch workouts based on the new filter
+    }
+    
+
 
 
 
@@ -43,9 +53,12 @@ export default function Workout() {
             .then(data => {
                 if (typeof data.message !== "string") {
                     Swal.fire({
-                        title: "Added Workout Successfully",
-                        icon: "success"
+                        title: "Awesome Job!",
+                        text: "You're one step closer to your fitness goals. Keep going!",
+                        icon: "success",
+                        confirmButtonText: "Let's Do More!"
                     });
+                    
                     closeAddWorkoutModal();
                 } else {
                     Swal.fire({
@@ -186,7 +199,7 @@ export default function Workout() {
 
                         if (data.message === "Workout status updated successfully") {
                             Swal.fire({
-                                title: "Congratulations!",
+                                title: "Great Job!",
                                 text: "Your workout has been completed.",
                                 icon: "success"
                             });
@@ -219,121 +232,106 @@ export default function Workout() {
     }
 
 
-
-
     const fetchWorkout = () => {
-
         fetch("https://app-building-api.onrender.com/workouts/getMyWorkouts", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         })
-            .then(res => res.json())
-            .then(data => {
-                // console.log("fetchWorkout", data);
-                if (typeof data.message !== "string") {
-
-
-                    // MAP
-                    const workoutsArr = data.workouts.map(workout => {
-                        return (
-                            <tr key={workout._id}>
-
-                                <td>
-                                    <h5>
-                                        <Badge bg={(workout.status === 'pending') ? 'secondary' : 'success'}>
-                                            {workout.status.charAt(0).toUpperCase() + workout.status.slice(1)}
-                                        </Badge>
-                                    </h5>
-                                </td>
-
-                                <td>{workout.name}</td>
-                                <td>{workout.duration}</td>
-
-                                <td>
-                                    {/* {name, duration, workout, onUpdate} */}
-                                    {<UpdateWorkout workoutName={workout.name} workoutDuration={workout.duration} workout={workout._id} onUpdate={updateWorkout} />}
-                                </td>
-                                <td>
-                                    {<DeleteWorkout workout={workout._id} onDelete={deleteWorkout} />}
-                                </td>
-                                <td>
-                                    {<CompletedWorkout status={workout.status} workout={workout._id} onDone={completedWorkout} />}
-                                </td>
-
-                            </tr>
-                        )
-                    })
-
-
-
-                    setWorkouts(workoutsArr);
-
-                } else {
-                    setWorkouts([]);
-                }
-
-            });
-
-    }
-
-    useEffect(() => {
-
-        if (!user.id) {
-            navigate('/login');
-        }
+        .then(res => res.json())
+        .then(data => {
+            if (typeof data.message !== "string") {
+                // Sort workouts so 'pending' appears first and 'completed' appears last
+                const sortedWorkouts = data.workouts.sort((a, b) => {
+                    if (a.status === 'pending' && b.status === 'completed') {
+                        return -1;
+                    } else if (a.status === 'completed' && b.status === 'pending') {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                });
+    
+                // Map through sorted workouts
+                const workoutsArr = sortedWorkouts.map(workout => {
+                    const dateAdded = new Date(workout.dateAdded).toLocaleString(); // Format the date added
+                    const dateCompleted = workout.dateCompleted ? new Date(workout.dateCompleted).toLocaleString() : null; // Format date completed only once
+    
+                    return (
+                        <div className="col-lg-4 col-md-6 col-12 mb-3" key={workout._id}>
+                            <Card>
+                                <Card.Header>
+                                    <Card.Title>{workout.name}</Card.Title>
+                                </Card.Header>
+                                <Card.Body>
+                                    <Card.Text>Workout Time: {workout.duration}</Card.Text>
+                                    <Card.Text>Status: {workout.status === 'completed' ? 'You Did It!' : 'Pending'}</Card.Text>
+                                    <Card.Text className="text">Date Added: {dateAdded}</Card.Text> {/* Display the date added */}
+                                    
+                                    {/* Display the date completed only if the workout is completed */}
+                                    {workout.status === 'completed' && dateCompleted && (
+                                        <Card.Text className="text">Date Completed: {dateCompleted}</Card.Text>
+                                    )}
+                                </Card.Body>
+                                <Card.Footer>
+                                    <UpdateWorkout workoutName={workout.name} workoutDuration={workout.duration} workout={workout._id} onUpdate={updateWorkout} />
+                                    <DeleteWorkout workout={workout._id} onDelete={deleteWorkout} />
+                                    <CompletedWorkout status={workout.status} workout={workout._id} onDone={completedWorkout} />
+                                </Card.Footer>
+                            </Card>
+                        </div>
+                    );
+                });
+    
+                setWorkouts(workoutsArr);
+            } else {
+                setWorkouts([]);
+            }
+        });
+    };
+    
     
 
-        fetchWorkout(); //
-        // console.log("setWorkoutsArr:", workouts);
 
-    }, [addWorkout, user.id, navigate])
+    useEffect(() => {
+    if (!user.id) {
+        navigate('/login');
+    }
+
+    fetchWorkout(); 
+
+}, [fetchWorkout, addWorkout, user.id, navigate, filter]) // Add 'filter' to dependencies
 
 
-    return (
-        <>
-            <div className="container">
 
-            
+
+
+return (
+    <>
+        <div className="container">
             <Row>
                 <Col className="p-4 text-center">
-                    <h1>Your Workout Plans</h1>
-                    <p></p>
+                    <h1>Your Personalized Workout Plans</h1>
                 </Col>
             </Row>
-            <Row>
+            <Row className="mb-5 d-flex justify-content-center">
+                <Col xs="auto">
                 <Button variant="danger" onClick={showAddWorkoutModal}>
-                    ADD WORKOUT
+                    {workouts.length > 0 ? " Add your next workout!" : "ADD WORKOUT"}
                 </Button>
-
-                <AddWorkout show={addWorkoutModal} handleClose={closeAddWorkoutModal} onAdd={addWorkout} />
+                </Col>
             </Row>
+            
+           
+            <Container className='row' >
+            {workouts}
+            </Container>
+        </div>
 
-            <Row>
+        
 
-
-
-                <Table striped bordered hover responsive>
-                    <thead>
-                        <tr className="text-center">
-                            <th>Status</th>
-                            <th>Name</th>
-                            <th>Duration</th>
-                            <th colSpan={3}>Actions</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {workouts}
-                    </tbody>
-                </Table>
-            </Row>
-
-            </div>
-
-
-
-
-        </>
-    )
+        {/* AddWorkoutModal Component */}
+        <AddWorkout show={addWorkoutModal} handleClose={closeAddWorkoutModal} onAdd={addWorkout} />
+    </>
+);
 }

@@ -140,7 +140,7 @@ export default function Login() {
             </Form.Group>
 
 
-                <Button variant="danger" type="submit" id="submitBtn" className=' col-12 p-2'>
+                <Button variant="danger" type="submit" id="gradient-button" className=' col-12 p-2'>
                     Login
                 </Button>
 

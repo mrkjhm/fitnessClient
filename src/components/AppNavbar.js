@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { Link, NavLink } from 'react-router-dom';
 
-import './AppNavbar.css'
+
 
 import UserContext from '../UserContext';
 
@@ -15,7 +15,7 @@ export default function AppNavbar() {
     const { user } = useContext(UserContext);
 
 	return(
-		<Navbar bg="danger" data-bs-theme="dark" expand="lg" className='Navbar'>
+		<Navbar bg="danger" data-bs-theme="dark" expand="lg" className='Navbar' id='gradient-button'>
 	
         <>
             <div className='container'>
@@ -23,7 +23,7 @@ export default function AppNavbar() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" bg="dark"/>
             <Navbar.Collapse>
                 <Nav className="ms-auto">
-                    <Nav.Link as={NavLink} to="/" exact="true">Home</Nav.Link>
+                    <Nav.Link as={NavLink} to="/">Home</Nav.Link>
                     {
                         user.id
                         ?

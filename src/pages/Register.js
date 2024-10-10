@@ -176,7 +176,7 @@ export default function Register() {
 
             
                 
-            <Button variant="danger" type="submit" className=' col-12 p-2'>Register</Button>
+            <Button variant="danger" type="submit" className=' col-12 p-2' id="gradient-button">Register</Button>
 
             <p className='mt-4'>Already have an Account? <span id='login' onClick={handleLoginClick}><strong>Login</strong></span></p>
                 

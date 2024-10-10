@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import Running_img from '../assets/running-img.jpg'
 
+
 export default function Banner() {
 
     return (
