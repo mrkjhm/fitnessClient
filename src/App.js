@@ -20,74 +20,20 @@ import Workout from './pages/Workout';
 
 
 function App() {
-  // Default user state
-  const [user, setUser] = useState({
-    id: null,
-    isAdmin: null
-  })
-
-
-  useEffect(() => {
-
-    fetch(`https://app-building-api.onrender.com/users/details`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data)
-
-        if (typeof data.user !== "undefined") {
-
-          setUser({
-            id: data.user._id,
-            isAdmin: data.user.isAdmin
-          });
-
-        } else {
-
-          setUser({
-            id: null,
-            isAdmin: null
-          });
-
-        }
-
-      })
-
-  }, []);
-
-  // Unset User
-  const unsetUser = () => {
-
-    localStorage.clear();
-
-  };
-
-
-
   return (
-    <UserProvider value={{ user, setUser, unsetUser }}>
+    <UserProvider>
       <Router>
         <AppNavbar />
-        {/* <Container> */}
-          <div>
-          <Routes>
-            <Route path='/' element={<Home />} />
-
-            <Route path='/register' element={<Register />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/logout' element={<Logout />} />
-
-            <Route path='/workout' element={<Workout />} />
-          </Routes>
-          </div>
-        
-        {/* </Container> */}
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/logout' element={<Logout />} />
+          <Route path='/workout' element={<Workout />} />
+        </Routes>
       </Router>
     </UserProvider>
-  )
+  );
 }
 
 export default App;

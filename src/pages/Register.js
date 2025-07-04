@@ -6,17 +6,16 @@ import UserContext from '../UserContext';
 
 export default function Register() {
 
+    const API_URL = process.env.REACT_APP_API_URL;
     const handleLoginClick = () => {
         navigate('/login')
     }
-	
+
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
 
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
+    const [userName, setUserName] = useState("");
     const [mobileNo, setMobileNo] = useState("");
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -26,13 +25,13 @@ export default function Register() {
 
     useEffect(() => {
 
-        if ((firstName !== "" && lastName !== "" && mobileNo !== "" && email !== "" && password !== '' && confirmPassword !== "") && (password === confirmPassword)) {
+        if ((userName !== "" && mobileNo !== "" && email !== "" && password !== '' && confirmPassword !== "") && (password === confirmPassword)) {
             setIsActive(true)
         } else {
             setIsActive(false)
         }
 
-        if(user.id){
+        if (user.id) {
             navigate('/workout')
         }
 
@@ -44,18 +43,18 @@ export default function Register() {
 
         e.preventDefault();
 
-        fetch('https://app-building-api.onrender.com/users/register', {
+        fetch(`${API_URL}/users/register`, {
 
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                firstName: firstName,
-			    lastName:  lastName,
-                mobileNo:  mobileNo,
+                userName: userName,
                 email: email,
-                password: password
+                password: password,
+                mobileNo: mobileNo,
+                confirmPassword: confirmPassword
 
             })
         })
@@ -68,8 +67,7 @@ export default function Register() {
                 //data will only contain an email property if we can properly save our user.
                 if (data.message === "Registered Successfully") {
 
-                    setFirstName('');
-                    setLastName('');
+                    setUserName('');
                     setMobileNo('');
                     setEmail('');
                     setPassword('');
@@ -85,104 +83,92 @@ export default function Register() {
 
             })
     }
-    
 
-	return (
+
+    return (
 
         <>
 
-  
 
 
-        <div className='container d-flex justify-content-center align-items-center' style={{ minHeight: '80vh'}}>
-            <Form onSubmit={(e) => registerUser(e)} className='col-lg-5 col-10'>
-            <h2 className=" mb-4">Register</h2>
 
-                <Form.Group className='pb-2'>
-                    <FloatingLabel controlId="floatingInput" label="First Name">
-                        <Form.Control 
-                        type="text"
-                        placeholder="First Name"
-                        value={firstName}
-                        onChange={e => {setFirstName(e.target.value)}}
-                        required
-                        />
-                    </FloatingLabel>
-                </Form.Group>
+            <div className='container d-flex justify-content-center align-items-center' style={{ minHeight: '80vh' }}>
+                <Form onSubmit={(e) => registerUser(e)} className='col-lg-5 col-10'>
+                    <h2 className=" mb-4">Register</h2>
 
-                <Form.Group className='pb-2'>
-                    <FloatingLabel controlId="floatingInput" label="Last Name">
-                        <Form.Control 
-                        type="text"
-                        placeholder="Last Name"
-                        value={lastName}
-                        onChange={e => {setLastName(e.target.value)}}
-                        required
-                        />
-                    </FloatingLabel>
-                </Form.Group>
-                
-                <Form.Group className='pb-2'>
-                    <FloatingLabel controlId="floatingInput" label="Mobile No.">
-                        <Form.Control 
-                        type="number"
-                        placeholder="Modile No."
-                        value={mobileNo}
-                        onChange={e => {setMobileNo(e.target.value)}}
-                        required
-                        />
-                    </FloatingLabel>
-                </Form.Group>
+                    <Form.Group className='pb-2'>
+                        <FloatingLabel controlId="floatingInput" label="Username">
+                            <Form.Control
+                                type="text"
+                                placeholder="Username"
+                                value={userName}
+                                onChange={e => { setUserName(e.target.value) }}
+                                required
+                            />
+                        </FloatingLabel>
+                    </Form.Group>
 
-                <Form.Group className='pb-2'>
-                    <FloatingLabel controlId="floatingInput" label="Email address">
-                        <Form.Control 
-                        type="email"
-                        placeholder="Email address"
-                        value={email}
-                        onChange={e => {setEmail(e.target.value)}}
-                        required
-                        />
-                    </FloatingLabel>
-                </Form.Group>
+                    <Form.Group className='pb-2'>
+                        <FloatingLabel controlId="floatingInput" label="Email address">
+                            <Form.Control
+                                type="email"
+                                placeholder="Email address"
+                                value={email}
+                                onChange={e => { setEmail(e.target.value) }}
+                                required
+                            />
+                        </FloatingLabel>
+                    </Form.Group>
 
-                <Form.Group className='pb-2'>
-                    <FloatingLabel controlId="floatingInput" label="Password">
-                        <Form.Control 
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={e => {setPassword(e.target.value)}}
-                        required
-                        />
-                    </FloatingLabel>
-                </Form.Group>
+                    <Form.Group className='pb-2'>
+                        <FloatingLabel controlId="floatingInput" label="Mobile No.">
+                            <Form.Control
+                                type="number"
+                                placeholder="Modile No."
+                                value={mobileNo}
+                                onChange={e => { setMobileNo(e.target.value) }}
+                                required
+                            />
+                        </FloatingLabel>
+                    </Form.Group>
 
-                <Form.Group className='pb-2'>
-                    <FloatingLabel controlId="floatingInput" label="Confirmed Password">
-                        <Form.Control 
-                        type="password"
-                        placeholder="Confirmed Password"
-                        value={confirmPassword}
-                        onChange={e => {setConfirmPassword(e.target.value)}}
-                        required
-                        />
-                    </FloatingLabel>
-                </Form.Group>
+                    <Form.Group className='pb-2'>
+                        <FloatingLabel controlId="floatingInput" label="Password">
+                            <Form.Control
+                                type="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={e => { setPassword(e.target.value) }}
+                                required
+                            />
+                        </FloatingLabel>
+                    </Form.Group>
+
+                    <Form.Group className='pb-2'>
+                        <FloatingLabel controlId="floatingInput" label="Confirmed Password">
+                            <Form.Control
+                                type="password"
+                                placeholder="Confirmed Password"
+                                value={confirmPassword}
+                                onChange={e => { setConfirmPassword(e.target.value) }}
+                                required
+                            />
+                        </FloatingLabel>
+                    </Form.Group>
 
 
 
 
 
-            
-                
-            <Button variant="danger" type="submit" className=' col-12 p-2' id="gradient-button">Register</Button>
 
-            <p className='mt-4'>Already have an Account? <span id='login' onClick={handleLoginClick}><strong>Login</strong></span></p>
-                
-            </Form>
-        </div>
+
+                    <Button variant="danger" type="submit" className=' col-12 p-2' id="gradient-button">Register</Button>
+
+                    <p className='mt-4'>Already have an Account? <span id='login' onClick={handleLoginClick}><strong>Login</strong></span></p>
+
+                </Form>
+            </div>
         </>
-		
-		)
+
+    )
 }

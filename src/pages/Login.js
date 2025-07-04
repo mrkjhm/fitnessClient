@@ -6,6 +6,8 @@ import UserContext from '../UserContext';
 
 export default function Login() {
 
+    const API_URL = process.env.REACT_APP_API_URL;
+
     const handleRegisterClicl = () => {
         navigate('/register')
     }
@@ -27,18 +29,18 @@ export default function Login() {
             setIsActive(false);
         }
 
-        if (user.id) {
+        if (user?.id) {
             navigate('/workout');
         }
 
-    }, [email, password, navigate, user.id])
+    }, [email, password, navigate, user])
 
 
     function authentication(e) {
 
         // Prevents page redirection via form submission
         e.preventDefault();
-		fetch('https://app-building-api.onrender.com/users/login',{
+		fetch(`${API_URL}/users/login`,{
 
 		method: 'POST',
 		headers: {
@@ -55,6 +57,7 @@ export default function Login() {
 	.then(data => {
 
         // console.log(data)
+        console.log("Login API Response:", data);
 
         if (data.message === "Email and password do not match") {
             Swal.fire({
@@ -89,24 +92,32 @@ export default function Login() {
     }
 
     const retrieveUserDetails = (token) => {
-        
-        fetch('https://app-building-api.onrender.com/users/details', {
-            headers: {
-                Authorization: `Bearer ${ token }`
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log("Login Retrieved User:", data)
+    fetch(`${API_URL}/users/details`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("Login Retrieved User:", data);
+
+        if (data.user) {
             setUser({
                 id: data.user._id,
                 isAdmin: data.user.isAdmin
-
             });
+        } else {
+            // Optional fallback to avoid state errors
+            setUser({ id: null, isAdmin: null });
+            console.warn("User data not found in token response");
+        }
+    })
+    .catch(err => {
+        console.error("User fetch error:", err);
+        setUser({ id: null, isAdmin: null });
+    });
+};
 
-        })
-
-    };
 
 
     return (
